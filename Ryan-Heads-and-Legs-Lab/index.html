@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ryan's Heads & Legs Creature Lab</title>
+  <style>
+    :root{--ink:#17324d;--muted:#65758b;--paper:#fffdf7;--blue:#34a8ff;--navy:#163d68;--yellow:#ffd45d;--purple:#9b6cff;--green:#29bd77;--orange:#ff9838;--red:#ef4d62;--line:#dbe8f3;--shadow:0 14px 34px rgba(25,62,97,.13)}
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;color:var(--ink);font-family:"Trebuchet MS","Segoe UI",sans-serif;background:radial-gradient(circle at 8% 8%,#d9f5ff 0 9%,transparent 25%),radial-gradient(circle at 92% 88%,#fff0b9 0 8%,transparent 24%),#eef8ff}
+    button,input{font:inherit} button{cursor:pointer} .app{max-width:1280px;margin:auto;padding:18px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.brand{display:flex;gap:11px;align-items:center}.logo{width:52px;height:52px;display:grid;place-items:center;border-radius:17px;background:var(--navy);font-size:30px;box-shadow:0 7px 0 #0c2d4d;transform:rotate(-3deg)}h1{font-size:clamp(1.25rem,3vw,2rem);margin:0;line-height:1}.sub{color:var(--muted);font-weight:700;margin-top:5px;font-size:.9rem}.top-stats{display:flex;gap:8px}.pill{border:2px solid white;background:#fff;border-radius:999px;padding:8px 12px;font-weight:900;box-shadow:0 5px 16px #c9dce9}.new{border:0;background:var(--navy);color:#fff;padding:11px 16px;border-radius:14px;font-weight:900;box-shadow:0 5px 0 #0b2946}.new:active{transform:translateY(3px);box-shadow:0 2px 0 #0b2946}
+    .mission{background:#fff;border:3px solid var(--navy);border-radius:22px;padding:14px 18px;margin-bottom:14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px}.mission-no{flex:0 0 auto;background:var(--yellow);border:2px solid var(--navy);border-radius:13px;padding:7px 10px;font-weight:1000}.mission-text{font-size:clamp(1rem,2vw,1.25rem);font-weight:900;line-height:1.35}
+    main{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(330px,.95fr);gap:14px}.panel{background:rgba(255,255,255,.96);border-radius:24px;box-shadow:var(--shadow);overflow:hidden;border:2px solid #fff}.panel-title{padding:13px 17px;font-size:1rem;font-weight:1000;letter-spacing:.04em;text-transform:uppercase;background:#e7f5ff;border-bottom:2px solid var(--line);display:flex;align-items:center;justify-content:space-between}.lab{min-height:565px;display:flex;flex-direction:column}
+    .targets{display:flex;gap:9px;padding:13px 15px 7px}.target{flex:1;border-radius:15px;padding:9px 12px;border:2px solid var(--line);background:var(--paper)}.target-label{font-size:.76rem;text-transform:uppercase;color:var(--muted);font-weight:900}.target-value{font-size:1.45rem;font-weight:1000}.target.heads .target-value{color:#158bdb}.target.legs .target-value{color:var(--green)}
+    .palette{min-height:55px;display:flex;justify-content:center;align-items:center;gap:10px;padding:6px 12px}.creature-chip{display:flex;align-items:center;gap:7px;border:2px solid var(--line);border-radius:14px;background:#fff;padding:7px 11px;font-weight:900;box-shadow:0 3px 0 #ccdae6;user-select:none}.creature-chip[draggable=true]{cursor:grab}.chip-icon{font-size:1.55rem}.chip-legs{color:var(--purple)}
+    .creatures{position:relative;flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));align-content:center;gap:12px;padding:18px 20px;min-height:310px}.creature{position:relative;height:104px;border:2px dashed #b9cfe0;border-radius:23px;background:#f7fbff;display:flex;align-items:center;justify-content:center;transition:border-color .2s,background .2s,transform .25s}.creature:hover{transform:translateY(-2px)}.creature.drop-hot{border-color:var(--purple);background:#f0eaff}.creature.wrong{animation:wobble .35s}.face{font-size:2.7rem;filter:drop-shadow(0 3px 1px #cad5de);transition:transform .35s}.creature.changed .face{animation:flip .45s}.leg-dot{position:absolute;width:17px;height:25px;border-radius:9px 9px 11px 11px;background:var(--purple);border:2px solid var(--navy);transform-origin:50% 0;animation:legIn .3s both}.leg-dot::after{content:"";position:absolute;width:13px;height:6px;left:0;bottom:-4px;border-radius:6px;background:var(--navy)}.leg-count{position:absolute;right:6px;top:6px;background:#fff;border:2px solid var(--line);border-radius:999px;min-width:29px;text-align:center;font-weight:1000;font-size:.8rem;padding:3px}.unknown .leg-count{background:var(--yellow)}
+    .meter-wrap{padding:0 17px 16px}.meter-row{display:flex;justify-content:space-between;font-weight:900;margin-bottom:7px}.meter{height:18px;background:#e9f0f5;border-radius:99px;overflow:visible;position:relative}.meter-fill{height:100%;width:0;border-radius:99px;background:var(--orange);transition:width .45s cubic-bezier(.2,.8,.2,1),background .25s}.meter-target{position:absolute;right:0;top:-5px;height:28px;width:4px;background:var(--navy);border-radius:4px}.meter-message{text-align:center;min-height:25px;margin-top:8px;font-weight:900;color:var(--muted)}
+    .steps{padding:14px 15px 18px;display:flex;flex-direction:column;gap:9px}.step{display:grid;grid-template-columns:35px 1fr;gap:9px;padding:10px;border:2px solid var(--line);border-radius:16px;background:#fbfdff;transition:.2s}.step.active{border-color:var(--blue);box-shadow:0 0 0 3px #d9f2ff}.step.correct{border-color:#91ddb8;background:#effcf5}.step.incorrect{border-color:var(--red);background:#fff1f3;animation:wobble .32s}.step-num{width:31px;height:31px;border-radius:10px;display:grid;place-items:center;background:var(--navy);color:#fff;font-weight:1000}.step.correct .step-num{background:var(--green)}.step-text{font-weight:800;line-height:1.45}.equation{display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-top:7px}.answer-wrap{display:inline-flex;align-items:center;gap:3px}.answer{width:72px;height:42px;border:3px solid #afc5d6;border-radius:11px;text-align:center;font-size:1.15rem;font-weight:1000;color:var(--navy);outline:0;background:#fff}.answer:focus{border-color:var(--blue);box-shadow:0 0 0 4px #cdeeff}.answer.good{border-color:var(--green);color:#168a55}.answer.bad{border-color:var(--red);background:#fff}.mini-controls{display:inline-flex;gap:3px}.mini-controls button{width:34px;height:34px;border:0;border-radius:9px;background:#dcedfa;color:var(--navy);font-weight:1000}.feedback{min-height:18px;font-size:.84rem;margin-top:4px;color:var(--muted)}.correct .feedback{color:#168a55}.incorrect .feedback{color:#c72b42}.hint{align-self:flex-start;border:0;border-radius:12px;background:#fff1b9;color:#624800;padding:9px 12px;font-weight:900}.hint-box{display:none;border:2px dashed #f1ba30;background:#fff9de;border-radius:13px;padding:10px;font-weight:800}.hint-box.show{display:block}
+    .celebrate{position:fixed;inset:0;background:rgba(15,45,70,.45);display:none;place-items:center;z-index:10;padding:20px}.celebrate.show{display:grid}.award{max-width:410px;width:100%;text-align:center;background:#fff;border:4px solid var(--navy);border-radius:28px;padding:27px;box-shadow:0 20px 60px #0c2949;animation:pop .5s}.badge{font-size:5rem;animation:float 1.6s ease-in-out infinite}.award h2{font-size:2rem;margin:7px 0}.award p{font-size:1.05rem;color:var(--muted);font-weight:800}.award button{border:0;border-radius:14px;background:var(--green);color:#fff;padding:12px 18px;font-weight:1000;font-size:1.05rem;box-shadow:0 5px 0 #168a55}
+    .confetti{position:fixed;top:-20px;width:12px;height:20px;border-radius:3px;z-index:11;animation:fall 2.2s linear forwards}
+    @keyframes legIn{from{opacity:0;transform:scale(.1) translateY(-16px)}to{opacity:1}}@keyframes flip{50%{transform:scaleX(0)}100%{transform:scaleX(1)}}@keyframes wobble{25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-3px)}}@keyframes pop{from{transform:scale(.65) rotate(-4deg);opacity:0}}@keyframes float{50%{transform:translateY(-7px) rotate(4deg)}}@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+    @media(max-width:850px){main{grid-template-columns:1fr}.lab{min-height:470px}.creatures{min-height:270px}.top-stats .pill:first-child{display:none}}@media(max-width:520px){.app{padding:10px}.sub{display:none}.logo{width:44px;height:44px}.new{padding:10px}.mission{align-items:flex-start}.targets{padding-inline:10px}.creatures{grid-template-columns:repeat(auto-fit,minmax(65px,1fr));padding:12px 10px;gap:8px}.creature{height:91px}.face{font-size:2.25rem}.step{padding:8px}.panel{border-radius:18px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header><div class="brand"><div class="logo">🧪</div><div><h1>Ryan's Heads & Legs Lab</h1><div class="sub">Solve the creature mystery—one clue at a time.</div></div></div><div class="top-stats"><div class="pill">🏅 <span id="badgeCount">0</span></div><button class="new" id="newMission">New Mission</button></div></header>
+    <section class="mission"><div class="mission-no">MISSION <span id="missionNo">1</span></div><div class="mission-text" id="missionText"></div></section>
+    <main>
+      <section class="panel lab"><div class="panel-title"><span>Creature Lab</span><span id="labInstruction">Tap or drag a creature</span></div><div class="targets"><div class="target heads"><div class="target-label">Heads / creatures</div><div class="target-value" id="headTarget">—</div></div><div class="target legs"><div class="target-label">Target legs</div><div class="target-value" id="legTarget">—</div></div></div><div class="palette" id="palette"></div><div class="creatures" id="creatures" aria-live="polite"></div><div class="meter-wrap"><div class="meter-row"><span>Legs installed</span><span id="meterNumbers">0 / 0</span></div><div class="meter"><div class="meter-fill" id="meterFill"></div><div class="meter-target"></div></div><div class="meter-message" id="meterMessage">Start with step 1.</div></div></section>
+      <section class="panel"><div class="panel-title"><span>Mission Steps</span><span>Every box matters</span></div><div class="steps" id="steps"></div></section>
+    </main>
+  </div>
+  <div class="celebrate" id="celebrate"><div class="award"><div class="badge" id="awardIcon">🏅</div><h2 id="awardTitle">Creature Detective!</h2><p id="awardText">You matched every head and every leg.</p><button id="nextMission">Collect & Continue</button></div></div>
+  <script>
+  (()=>{
+    const TYPES=[
+      {name:'snake',plural:'snakes',icon:'🐍',legs:0,color:'#45c68b'},
+      {name:'chicken',plural:'chickens',icon:'🐔',legs:2,color:'#ffd45d'},
+      {name:'rabbit',plural:'rabbits',icon:'🐰',legs:4,color:'#9b6cff'},
+      {name:'insect',plural:'insects',icon:'🐞',legs:6,color:'#ef5d76'},
+      {name:'spider',plural:'spiders',icon:'🕷️',legs:8,color:'#58677c'}
+    ];
+    const PRAISE=['Brilliant clue!','Great thinking!','Exactly right!','Sharp detective work!','You found it!'];
+    const AWARDS=[['🏅','Creature Detective'],['🚀','Alien Engineer'],['🔭','Leg Counter'],['🧠','Puzzle Pathfinder'],['👑','Lab Champion']];
+    const $=s=>document.querySelector(s), els={missionText:$('#missionText'),missionNo:$('#missionNo'),headTarget:$('#headTarget'),legTarget:$('#legTarget'),palette:$('#palette'),creatures:$('#creatures'),steps:$('#steps'),meterFill:$('#meterFill'),meterNumbers:$('#meterNumbers'),meterMessage:$('#meterMessage'),labInstruction:$('#labInstruction'),celebrate:$('#celebrate'),badgeCount:$('#badgeCount')};
+    let mission=null,missionNumber=0,badges=Number(localStorage.getItem('ryanCreatureBadges')||0),timer=null,completed=false;
+    els.badgeCount.textContent=badges;
+    const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a, pick=a=>a[rand(0,a.length-1)];
+    function pair(){let a=pick(TYPES),b=pick(TYPES.filter(x=>x.legs!==a.legs));return a.legs<b.legs?[a,b]:[b,a]}
+    function makeMission(){
+      const kind=pick(['mix','mix','mystery','total','possible']);
+      if(kind==='mix'){
+        const [a,b]=pair(),ca=rand(2,7),cb=rand(2,6),heads=ca+cb,legs=ca*a.legs+cb*b.legs;
+        return {kind,a,b,ca,cb,heads,legs,text:`A habitat has ${heads} heads and ${legs} legs. It contains ${a.plural} and ${b.plural}. How many of each are there?`};
+      }
+      if(kind==='mystery'){
+        const known=pick(TYPES), mysteryLegs=pick([1,3,4,5,6,7,8].filter(n=>n!==known.legs)),knownCount=rand(2,5),unknownCount=rand(2,5),heads=knownCount+unknownCount,legs=knownCount*known.legs+unknownCount*mysteryLegs;
+        return {kind,known,mystery:{name:'moon alien',plural:'moon aliens',icon:'👽',legs:mysteryLegs,color:'#52b8ff'},knownCount,unknownCount,heads,legs,text:`There are ${knownCount} ${known.plural} and ${unknownCount} moon aliens. Together they have ${legs} legs. How many legs does each alien have?`};
+      }
+      if(kind==='total'){
+        const [a,b]=pair(),ca=rand(2,6),cb=rand(2,6),heads=ca+cb,legs=ca*a.legs+cb*b.legs;
+        return {kind,a,b,ca,cb,heads,legs,text:`The lab has ${ca} ${a.plural} and ${cb} ${b.plural}. How many heads and legs are there altogether?`};
+      }
+      const [a,b]=pair(),heads=rand(5,10),valid=Math.random()>.48,k=rand(0,heads),validLegs=(heads-k)*a.legs+k*b.legs,legs=valid?validLegs:validLegs+pick([1,Math.max(1,b.legs-a.legs-1)]);
+      return {kind,a,b,heads,legs,valid,text:`A report says ${heads} ${a.plural} and ${b.plural} have ${legs} legs altogether. Is that possible?`};
+    }
+    function stepsFor(m){
+      if(m.kind==='mix')return[
+        {label:`How many creatures are there?`,eq:`Heads =`,ans:m.heads,why:'One head belongs to each creature.'},
+        {label:`Pretend they are all ${m.a.plural}.`,eq:`${m.heads} × ${m.a.legs} =`,ans:m.heads*m.a.legs,why:`Start with the creature that has fewer legs.`},
+        {label:'How many more legs are needed?',eq:`${m.legs} − ${m.heads*m.a.legs} =`,ans:m.legs-m.heads*m.a.legs,why:'Compare the starting legs with the target.'},
+        {label:`Each ${m.b.name} adds ${m.b.legs-m.a.legs} legs. How many ${m.b.plural}?`,eq:`${m.legs-m.heads*m.a.legs} ÷ ${m.b.legs-m.a.legs} =`,ans:m.cb,why:'Share the extra legs into equal upgrades.'},
+        {label:`How many ${m.a.plural}?`,eq:`${m.heads} − ${m.cb} =`,ans:m.ca,why:'The rest must be the other creature.'},
+        {label:'Final leg check',eq:`${m.ca} × ${m.a.legs} + ${m.cb} × ${m.b.legs} =`,ans:m.legs,why:'Both the heads and legs must match.'}
+      ];
+      if(m.kind==='mystery')return[
+        {label:`Find the ${m.known.plural}’ legs.`,eq:`${m.knownCount} × ${m.known.legs} =`,ans:m.knownCount*m.known.legs,why:'Solve the part we already know.'},
+        {label:'Remove the known legs from the total.',eq:`${m.legs} − ${m.knownCount*m.known.legs} =`,ans:m.unknownCount*m.mystery.legs,why:'These legs belong to the aliens.'},
+        {label:'How many aliens share those legs?',eq:'Aliens =',ans:m.unknownCount,why:'Read the creature count carefully.'},
+        {label:'Share the remaining legs equally.',eq:`${m.unknownCount*m.mystery.legs} ÷ ${m.unknownCount} =`,ans:m.mystery.legs,why:'Each alien must receive the same number.'},
+        {label:'Check all the legs.',eq:`${m.knownCount*m.known.legs} + ${m.unknownCount} × ${m.mystery.legs} =`,ans:m.legs,why:'Put both groups back together.'}
+      ];
+      if(m.kind==='total')return[
+        {label:`Find the ${m.a.plural}’ legs.`,eq:`${m.ca} × ${m.a.legs} =`,ans:m.ca*m.a.legs,why:'Count the first group.'},
+        {label:`Find the ${m.b.plural}’ legs.`,eq:`${m.cb} × ${m.b.legs} =`,ans:m.cb*m.b.legs,why:'Now count the second group.'},
+        {label:'Add the heads.',eq:`${m.ca} + ${m.cb} =`,ans:m.heads,why:'Each creature has one head.'},
+        {label:'Add the legs.',eq:`${m.ca*m.a.legs} + ${m.cb*m.b.legs} =`,ans:m.legs,why:'Combine both groups of legs.'}
+      ];
+      const diff=m.b.legs-m.a.legs,base=m.heads*m.a.legs,extra=m.legs-base;
+      return[
+        {label:`Pretend all are ${m.a.plural}.`,eq:`${m.heads} × ${m.a.legs} =`,ans:base,why:'This gives the smallest possible starting total.'},
+        {label:'Find the extra legs in the report.',eq:`${m.legs} − ${base} =`,ans:extra,why:'Now test whether upgrades fit exactly.'},
+        {label:`Can ${extra} be shared in groups of ${diff}? Type 1 for YES or 0 for NO.`,eq:'Possible? 1 = YES, 0 = NO:',ans:m.valid?1:0,why:m.valid?'The extra legs divide into complete upgrades.':'There are leftover legs, so no creature mix can match.'}
+      ];
+    }
+    function start(){
+      mission=makeMission();mission.steps=stepsFor(mission);missionNumber++;completed=false;clearTimeout(timer);els.celebrate.classList.remove('show');
+      els.missionNo.textContent=missionNumber;els.missionText.textContent=mission.text;els.headTarget.textContent=mission.heads;els.legTarget.textContent=mission.legs;renderPalette();renderCreatures();renderSteps();updateVisual();requestAnimationFrame(()=>$('.answer')?.focus());
+    }
+    function shownTypes(){if(mission.kind==='mystery')return[mission.known,mission.mystery];return[mission.a,mission.b]}
+    function renderPalette(){
+      els.palette.innerHTML=''; shownTypes().forEach((t,i)=>{const c=document.createElement('div');c.className='creature-chip';c.draggable=true;c.dataset.type=i;c.innerHTML=`<span class="chip-icon">${t.icon}</span><span>${t.name}</span><span class="chip-legs">${mission.kind==='mystery'&&i===1?'?':t.legs} legs</span>`;c.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',i));els.palette.append(c)});
+      els.labInstruction.textContent=mission.kind==='mix'?'Tap a creature to upgrade it':'The picture follows your answers';
+    }
+    function creatureCount(){return mission.heads}
+    function renderCreatures(){
+      els.creatures.innerHTML='';const types=shownTypes();for(let i=0;i<creatureCount();i++){const d=document.createElement('div');d.className='creature';d.dataset.index=i;d.dataset.type='0';d.setAttribute('role','button');d.setAttribute('tabindex','0');d.setAttribute('aria-label',`Creature ${i+1}`);d.innerHTML='<span class="face"></span><span class="leg-count"></span><span class="legs"></span>';d.addEventListener('click',()=>{if(mission.kind==='mix'){d.dataset.type=d.dataset.type==='0'?'1':'0';syncCountFromBoard()}});d.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&mission.kind==='mix'){e.preventDefault();d.click()}});d.addEventListener('dragover',e=>{e.preventDefault();d.classList.add('drop-hot')});d.addEventListener('dragleave',()=>d.classList.remove('drop-hot'));d.addEventListener('drop',e=>{e.preventDefault();d.classList.remove('drop-hot');d.dataset.type=e.dataTransfer.getData('text/plain');syncCountFromBoard()});els.creatures.append(d)}
+      setBoardTypes(initialTypes());
+    }
+    function initialTypes(){
+      if(mission.kind==='total')return Array(mission.ca).fill(0).concat(Array(mission.cb).fill(1));
+      if(mission.kind==='mystery')return Array(mission.knownCount).fill(0).concat(Array(mission.unknownCount).fill(1));
+      return Array(mission.heads).fill(0);
+    }
+    function setBoardTypes(arr){[...els.creatures.children].forEach((d,i)=>{if(arr[i]!=null)d.dataset.type=arr[i]})}
+    function renderSteps(){
+      els.steps.innerHTML='';mission.steps.forEach((s,i)=>{const d=document.createElement('div');d.className='step'+(i===0?' active':'');d.innerHTML=`<div class="step-num">${i+1}</div><div><div class="step-text">${s.label}</div><div class="equation"><span>${s.eq}</span><span class="answer-wrap"><button class="adjust minus" aria-label="subtract one">−</button><input class="answer" inputmode="numeric" pattern="[0-9]*" aria-label="Answer for step ${i+1}" data-step="${i}"><button class="adjust plus" aria-label="add one">+</button></span></div><div class="feedback">${i===0?'Start here.':'Complete the step above first.'}</div></div>`;els.steps.append(d);const input=d.querySelector('input');input.addEventListener('input',()=>scheduleCheck(input));input.addEventListener('focus',()=>d.classList.add('active'));input.addEventListener('blur',()=>checkInput(input,true));d.querySelector('.minus').onclick=()=>adjust(input,-1);d.querySelector('.plus').onclick=()=>adjust(input,1)});
+      const hint=document.createElement('button');hint.className='hint';hint.textContent='💡 Show a small hint';const hb=document.createElement('div');hb.className='hint-box';hb.textContent=mission.steps[0].why;hint.onclick=()=>{const idx=currentStep();hb.textContent=mission.steps[idx]?.why||'Check that both the heads and legs match.';hb.classList.toggle('show')};els.steps.append(hint,hb);
+    }
+    function adjust(input,delta){input.value=Math.max(0,(Number(input.value)||0)+delta);checkInput(input,true)}
+    function scheduleCheck(input){clearTimeout(timer);input.value=input.value.replace(/[^0-9]/g,'');updateVisual();const expected=String(mission.steps[+input.dataset.step].ans);if(input.value.length<expected.length)return;timer=setTimeout(()=>checkInput(input,false),260)}
+    function checkInput(input,force){
+      const i=+input.dataset.step,s=mission.steps[i],row=input.closest('.step');if(input.value===''||(!force&&input.value.length<String(s.ans).length))return;
+      const ok=Number(input.value)===s.ans;row.classList.toggle('correct',ok);row.classList.toggle('incorrect',!ok);input.classList.toggle('good',ok);input.classList.toggle('bad',!ok);row.querySelector('.feedback').textContent=ok?pick(PRAISE):mistakeMessage(i,Number(input.value));
+      if(ok){row.classList.remove('active');const next=els.steps.querySelector(`input[data-step="${i+1}"]`);if(next&&!next.closest('.step').classList.contains('correct')){next.closest('.step').classList.add('active');setTimeout(()=>next.focus(),180)}else if(allCorrect())celebrate()}
+      else{row.classList.add('active');setTimeout(()=>{input.focus();input.select()},80)} updateVisual();
+    }
+    function mistakeMessage(i,value){const s=mission.steps[i];if(!Number.isFinite(value))return 'Enter a number so the lab can test it.';if(value>s.ans)return `That is ${value-s.ans} too many. ${s.why}`;return `That is ${s.ans-value} too few. ${s.why}`}
+    function currentStep(){const inputs=[...els.steps.querySelectorAll('input')];const i=inputs.findIndex(x=>!x.closest('.step').classList.contains('correct'));return i<0?inputs.length-1:i}
+    function valueAt(i,fallback=0){const x=els.steps.querySelector(`input[data-step="${i}"]`);return x&&x.value!==''?Number(x.value):fallback}
+    function syncCountFromBoard(){
+      const n=[...els.creatures.children].filter(x=>x.dataset.type==='1').length;if(mission.kind==='mix'){const input=els.steps.querySelector('input[data-step="3"]');input.value=n;checkInput(input,true)}else updateVisual();
+    }
+    function visualTypes(){
+      if(mission.kind==='mix'){let upgrades=Math.max(0,Math.min(mission.heads,valueAt(3,0)));return Array(upgrades).fill(1).concat(Array(mission.heads-upgrades).fill(0))}
+      return initialTypes();
+    }
+    function legValue(typeIndex){
+      const t=shownTypes()[typeIndex];if(mission.kind==='mystery'&&typeIndex===1)return Math.max(0,Math.min(10,valueAt(3,0)));return t.legs;
+    }
+    function updateVisual(){
+      const arr=visualTypes(),types=shownTypes();let total=0;[...els.creatures.children].forEach((d,i)=>{const old=d.dataset.type,ti=arr[i]??+d.dataset.type;if(old!==String(ti))d.classList.add('changed');setTimeout(()=>d.classList.remove('changed'),460);d.dataset.type=ti;const t=types[ti],legs=legValue(ti);total+=legs;d.style.background=`${t.color}20`;d.style.borderColor=`${t.color}aa`;d.querySelector('.face').textContent=t.icon;d.querySelector('.leg-count').textContent=(mission.kind==='mystery'&&ti===1&&valueAt(3,-1)<0)?'?':legs;const holder=d.querySelector('.legs');while(holder.children.length>legs)holder.lastChild.remove();while(holder.children.length<legs){const leg=document.createElement('i');leg.className='leg-dot';holder.append(leg)}placeLegs(holder)});
+      const target=mission.legs,pct=Math.min(118,target?total/target*100:0);els.meterFill.style.width=pct+'%';els.meterFill.style.background=total===target?'var(--green)':total>target?'var(--red)':'var(--orange)';els.meterNumbers.textContent=`${total} / ${target}`;
+      if(total===target)els.meterMessage.textContent='Perfect leg match!';else if(total>target)els.meterMessage.textContent=`Oops—${total-target} too many legs. Take some off.`;else els.meterMessage.textContent=`${target-total} more legs are needed.`;
+    }
+    function placeLegs(holder){const legs=[...holder.children],n=legs.length;legs.forEach((leg,i)=>{const col=i%4,row=Math.floor(i/4),x=(col-1.5)*16,y=65+row*9;leg.style.left=`calc(50% + ${x}px)`;leg.style.top=y+'px';leg.style.transform=`rotate(${(col-1.5)*5}deg)`})}
+    function allCorrect(){return [...els.steps.querySelectorAll('.step')].every(r=>r.classList.contains('correct'))}
+    function celebrate(){if(completed)return;completed=true;badges++;localStorage.setItem('ryanCreatureBadges',badges);els.badgeCount.textContent=badges;const a=pick(AWARDS);$('#awardIcon').textContent=a[0];$('#awardTitle').textContent=a[1]+'!';$('#awardText').textContent=`Mission ${missionNumber} solved. Every head and leg checks out.`;els.celebrate.classList.add('show');for(let i=0;i<30;i++){const c=document.createElement('i');c.className='confetti';c.style.left=rand(2,98)+'vw';c.style.background=pick(['#ffd45d','#34a8ff','#9b6cff','#29bd77','#ef4d62']);c.style.animationDelay=rand(0,7)/10+'s';document.body.append(c);setTimeout(()=>c.remove(),3000)}}
+    $('#newMission').onclick=start;$('#nextMission').onclick=start;start();
+  })();
+  </script>
+</body>
+</html>
