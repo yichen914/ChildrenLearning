@@ -69,6 +69,7 @@
       <div class="modal-icon">🧩</div>
       <h2>NUMBER FRIENDS MISSION</h2>
       <p>How many tiles should appear in each round?</p>
+      <p>Every round includes one <strong>+ or −</strong> tile and one <strong>× or ÷</strong> tile.</p>
       <div class="tile-options" id="tileOptions"><button class="tile-choice" data-tiles="7">7</button><button class="tile-choice active" data-tiles="8">8</button><button class="tile-choice" data-tiles="10">10</button><button class="tile-choice" data-tiles="12">12</button></div>
       <p>Reach <strong>100 rescue energy</strong>. There is no time limit, but fast finds finish the mission in fewer rounds.</p>
       <div class="speed-table"><div><strong>+20</strong>under 4s</div><div><strong>+15</strong>under 7s</div><div><strong>+10</strong>under 12s</div><div><strong>+7</strong>keep going</div></div>
@@ -120,11 +121,11 @@
       const dueIndex=reviewQueue.findIndex(x=>x.due<=round),primary=dueIndex>=0?reviewQueue.splice(dueIndex,1)[0].family:makeFamily();
       let best=null;
       for(let attempt=0;attempt<100;attempt++){
-        const maxSigns=Math.min(4,tileCount-5),signCount=rand(2,maxSigns),numberCount=tileCount-signCount,tokens=[];
+        const signCount=2,numberCount=tileCount-signCount,tokens=[];
         primary.nums.forEach(value=>tokens.push({id:++tokenId,kind:'number',value}));
         tokens.push({id:++tokenId,kind:'sign',value:primary.op});
-        const otherSigns=shuffle(OP_SYMBOLS.filter(x=>x!==primary.op));
-        while(tokens.filter(t=>t.kind==='sign').length<signCount)tokens.push({id:++tokenId,kind:'sign',value:otherSigns.pop()});
+        const oppositeSigns=['+','−'].includes(primary.op)?['×','÷']:['+','−'];
+        tokens.push({id:++tokenId,kind:'sign',value:oppositeSigns[rand(0,1)]});
         while(tokens.filter(t=>t.kind==='number').length<numberCount)tokens.push({id:++tokenId,kind:'number',value:randomNumber()});
         shuffle(tokens);const groups=findGroups(tokens),candidate={tokens,groups,primary};
         if(groups.length>=1&&groups.length<=4)return candidate;
