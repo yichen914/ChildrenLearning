@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ryan's Violin Key Lab</title>
+  <style>
+    :root{--ink:#f8f2e8;--muted:#bcaf9e;--night:#17131d;--panel:#241c2b;--wood:#9d4f2f;--gold:#f7c963;--red:#e8665b;--green:#6fd6a6;--blue:#62b9ff;--line:#4b3b50}
+    *{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"Trebuchet MS","Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 10% 0,#4b2532 0,transparent 28%),radial-gradient(circle at 90% 12%,#18394b 0,transparent 25%),var(--night)}button{font:inherit}.app{width:min(1240px,100%);margin:auto;padding:16px;display:grid;gap:14px}
+    header{display:flex;justify-content:space-between;align-items:center;gap:14px}.brand{display:flex;align-items:center;gap:12px}.logo{width:60px;height:60px;border-radius:20px;display:grid;place-items:center;font-size:2rem;background:linear-gradient(145deg,#d67842,#74331f);border:2px solid #ffc28e;box-shadow:0 0 28px #d86e4366}.brand h1{margin:0;font-size:clamp(1.35rem,3vw,2.2rem)}.brand p{margin:3px 0;color:var(--muted);font-weight:800}.pill{border:1px solid #6f5a6f;border-radius:999px;background:#211927;color:var(--ink);padding:10px 14px;font-weight:900}
+    main{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(360px,.8fr);gap:14px}.card{background:linear-gradient(155deg,#2b2132f2,#1d1725f2);border:1px solid var(--line);border-radius:24px;box-shadow:0 18px 55px #0006}.builder{padding:18px}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px}.section-title h2{margin:0;font-size:1.25rem}.step{color:var(--gold);font-size:.78rem;font-weight:1000;letter-spacing:.08em}.mode-row{display:flex;gap:9px;margin:14px 0}.mode{flex:1;border:2px solid #5f4d68;border-radius:15px;background:#17121d;color:var(--ink);padding:11px;font-weight:1000;cursor:pointer}.mode.active{border-color:var(--gold);background:#5b4321;box-shadow:0 0 22px #f7c96344}.mode b{font-size:1.45rem;margin-right:6px}.staff-wrap{position:relative;height:235px;border-radius:22px;overflow:hidden;background:linear-gradient(#fffdf7,#efe4d3);border:5px solid #7b3e28;box-shadow:inset 0 0 25px #6f41293d}.staff-wrap::after{content:"CLICK A LINE OR SPACE";position:absolute;right:12px;bottom:8px;color:#8f735d;font-size:.68rem;font-weight:1000;letter-spacing:.1em}.staff-svg{width:100%;height:100%;display:block}.slot-layer{position:absolute;inset:0}.slot{position:absolute;width:38px;height:48px;transform:translate(-50%,-50%);border:0;border-radius:11px;background:#bd9c7a1c;color:#8d7665;font-family:Georgia,serif;font-size:2.4rem;font-weight:900;line-height:1;cursor:pointer;transition:.18s}.slot:hover,.slot:focus-visible{background:#f1c86755;outline:3px solid #dcad43;transform:translate(-50%,-50%) scale(1.08)}.slot.selected{color:#211822;background:var(--slot);box-shadow:0 4px 0 #4e3524,0 0 22px var(--slot);animation:pop .34s ease}.slot .tiny{position:absolute;left:50%;bottom:-17px;transform:translateX(-50%);font:900 .6rem "Trebuchet MS";color:#6f5648;white-space:nowrap}.staff-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.action{border:1px solid #715d72;border-radius:12px;background:#19131f;color:var(--ink);padding:9px 12px;font-weight:900;cursor:pointer}.action.primary{background:var(--gold);color:#2d200d;border-color:#ffe09a}.order-strip{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}.order-chip{border-radius:999px;padding:6px 9px;background:#17121d;border:1px solid #57475d;color:var(--muted);font-weight:900;font-size:.78rem}.order-chip.on{color:#181119;border-color:transparent;background:var(--chip)}
+    .answer{padding:18px;display:flex;flex-direction:column;gap:12px}.key-result{position:relative;overflow:hidden;border:1px solid #725e75;border-radius:20px;padding:18px;text-align:center;background:radial-gradient(circle at 50% 0,#64405b88,transparent 62%),#17121d}.key-result.valid{border-color:var(--green);box-shadow:inset 0 0 35px #6fd6a619}.key-result.invalid{border-color:var(--red)}.key-label{font-size:.72rem;color:var(--muted);font-weight:1000;letter-spacing:.12em}.key-name{font-size:clamp(2.3rem,6vw,4.4rem);font-weight:1000;color:var(--gold);line-height:1.05;margin:5px 0}.key-explain{min-height:42px;color:var(--muted);font-weight:800;line-height:1.35}.formula{border-radius:15px;background:#17121d;border:1px solid #4f4155;padding:11px;color:var(--muted);font-size:.86rem;font-weight:800;line-height:1.45}.formula strong{color:var(--ink)}.challenge{border-radius:17px;border:1px solid #5c4c63;background:linear-gradient(135deg,#3d2350,#203a54);padding:13px}.challenge-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.challenge h3{margin:0;font-size:1rem}.target{color:var(--gold);font-weight:1000;font-size:1.25rem}.stars{color:var(--gold);font-weight:1000}.challenge p{margin:6px 0 0;color:#d0c2d7;font-size:.83rem;font-weight:800}
+    .finger-card{grid-column:1/-1;padding:18px}.finger-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr);gap:16px;margin-top:12px}.fingerboard{border-radius:22px;background:linear-gradient(90deg,#b87843 0 10%,#321f22 10% 96%,#8d4b2d 96%);border:2px solid #b67b4e;padding:14px 12px;display:grid;gap:12px;overflow:hidden}.string-row{display:grid;grid-template-columns:52px repeat(8,1fr);align-items:center;min-height:63px;position:relative}.string-row::after{content:"";position:absolute;left:53px;right:0;top:50%;height:var(--thick);background:linear-gradient(#e8d8b7,#88775d);box-shadow:0 2px 3px #000;z-index:0}.string-name{position:relative;z-index:2;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#f4d399;color:#372316;border:3px solid #8d5530;font-size:1.25rem;font-weight:1000}.finger{position:relative;z-index:2;justify-self:center;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;border:2px solid #816e6b;background:#211a20;color:#9d8f91;font-size:.66rem;font-weight:1000;text-align:center;line-height:1.05;transition:.24s}.finger.hit{width:48px;height:48px;border-color:#fff7d9;background:var(--hit);color:#1c1419;box-shadow:0 0 24px var(--hit);animation:pulse .7s ease}.finger.hit::after{content:attr(data-note);position:absolute;top:-16px;left:50%;transform:translateX(-50%);border-radius:999px;background:#fff;color:#201419;padding:2px 6px;font-size:.63rem;white-space:nowrap;box-shadow:0 2px 8px #0007}.finger.open{border-radius:9px}.finger-key{display:grid;grid-template-columns:52px repeat(8,1fr);color:#bdaead;font-size:.62rem;font-weight:900;text-align:center;padding:0 12px;margin-top:-6px}.finger-key span:first-child{text-align:left}.effects{display:flex;flex-direction:column;gap:8px;max-height:355px;overflow:auto;padding-right:3px}.empty{border:1px dashed #675669;border-radius:17px;padding:28px 16px;text-align:center;color:var(--muted);font-weight:900}.effect{border-radius:15px;border-left:7px solid var(--effect);background:#17121d;padding:10px 12px}.effect h3{margin:0 0 5px;color:var(--effect);font-size:1.05rem}.effect p{margin:0;color:#d1c4d1;font-size:.83rem;font-weight:800;line-height:1.4}.legend-note{margin-top:10px;color:var(--muted);font-size:.76rem;font-weight:800;line-height:1.45}.toast{position:fixed;left:50%;top:18px;transform:translate(-50%,-130%);z-index:30;border-radius:999px;background:#f7c963;color:#2b1c0b;padding:11px 18px;font-weight:1000;box-shadow:0 9px 35px #0008;transition:.35s}.toast.show{transform:translate(-50%,0)}.confetti{position:fixed;z-index:50;width:10px;height:14px;background:var(--c);left:50%;top:42%;pointer-events:none;animation:fly .9s ease-out forwards}
+    @keyframes pop{45%{transform:translate(-50%,-50%) scale(1.25)}}@keyframes pulse{45%{transform:scale(1.12)}}@keyframes fly{to{opacity:0;transform:translate(var(--x),var(--y)) rotate(540deg)}}
+    @media(max-width:900px){main{grid-template-columns:1fr}.finger-layout{grid-template-columns:1fr}.finger-card{grid-column:auto}.effects{max-height:none}.brand p{display:none}}
+    @media(max-width:600px){.app{padding:9px}.pill{display:none}.builder,.answer,.finger-card{padding:12px}.staff-wrap{height:205px}.slot{width:34px;height:42px;font-size:2rem}.fingerboard{padding:10px 5px}.string-row{grid-template-columns:42px repeat(8,1fr);min-height:58px}.string-row::after{left:42px}.string-name{width:35px;height:35px}.finger{width:31px;height:31px;font-size:.55rem}.finger.hit{width:39px;height:39px}.finger-key{grid-template-columns:42px repeat(8,1fr);padding:0 5px}.mode{padding:9px 4px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand"><div class="logo">🎻</div><div><h1>RYAN'S VIOLIN KEY LAB</h1><p>Build a key signature. Watch the fingers move.</p></div></div>
+      <button class="pill" id="soundBtn" type="button">🔊 SOUND ON</button>
+    </header>
+
+    <main>
+      <section class="card builder">
+        <div class="section-title"><h2>Build the key signature</h2><span class="step">STEP 1 · CHOOSE & TAP</span></div>
+        <div class="mode-row" role="group" aria-label="Accidental type">
+          <button class="mode active" data-mode="sharp" type="button"><b>♯</b> Sharps</button>
+          <button class="mode" data-mode="flat" type="button"><b>♭</b> Flats</button>
+        </div>
+        <div class="staff-wrap" aria-label="Interactive treble staff">
+          <svg class="staff-svg" viewBox="0 0 620 180" role="img" aria-label="Treble clef staff">
+            <rect width="620" height="180" fill="#fffaf1"/>
+            <g stroke="#33281f" stroke-width="2">
+              <line x1="18" x2="602" y1="52" y2="52"/><line x1="18" x2="602" y1="68" y2="68"/><line x1="18" x2="602" y1="84" y2="84"/><line x1="18" x2="602" y1="100" y2="100"/><line x1="18" x2="602" y1="116" y2="116"/>
+              <line x1="18" x2="18" y1="52" y2="116"/><line x1="602" x2="602" y1="52" y2="116"/>
+            </g>
+            <text x="29" y="115" font-size="86" font-family="Segoe UI Symbol, Noto Music, serif" fill="#2c211b">𝄞</text>
+          </svg>
+          <div class="slot-layer" id="slotLayer"></div>
+        </div>
+        <div class="staff-actions">
+          <button class="action primary" id="nextBtn" type="button">＋ Add next in order</button>
+          <button class="action" id="clearBtn" type="button">Clear staff</button>
+          <button class="action" id="orderBtn" type="button">Hide note names</button>
+        </div>
+        <div class="order-strip" id="orderStrip"></div>
+      </section>
+
+      <aside class="card answer">
+        <div class="section-title"><h2>Major key detector</h2><span class="step">STEP 2 · READ</span></div>
+        <div class="key-result valid" id="keyResult">
+          <div class="key-label">THIS IS</div><div class="key-name" id="keyName">C MAJOR</div><div class="key-explain" id="keyExplain">No sharps or flats. All fingers use the natural pattern.</div>
+        </div>
+        <div class="formula" id="formula"><strong>C major</strong> is the home base: zero accidentals.</div>
+        <div class="challenge">
+          <div class="challenge-top"><div><h3>🎯 Key Detective</h3><div class="target" id="target">Ready?</div></div><div class="stars" id="stars">★ 0</div></div>
+          <p id="challengeText">Press the button, then build the mystery major key on the staff.</p>
+          <button class="action primary" id="challengeBtn" type="button" style="margin-top:9px">Give me a challenge</button>
+        </div>
+      </aside>
+
+      <section class="card finger-card">
+        <div class="section-title"><h2>Violin finger map · first position</h2><span class="step">STEP 3 · FOLLOW THE COLOURS</span></div>
+        <div class="finger-layout">
+          <div>
+            <div class="fingerboard" id="fingerboard"></div>
+            <div class="finger-key"><span></span><span>OPEN</span><span>½ step</span><span>1 step</span><span>1½</span><span>2</span><span>2½</span><span>3</span><span>3½</span></div>
+            <div class="legend-note">Beginner guide: standard tuning G–D–A–E, first position. “High” and “low” describe where the finger moves. Some enharmonic notes can use another fingering; this tool shows a clear first-position choice.</div>
+          </div>
+          <div class="effects" id="effects"><div class="empty">Add a ♯ or ♭ on the staff.<br>The affected fingers will light up here.</div></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+  (()=>{
+    const MODES={
+      sharp:{symbol:'♯',order:['F♯','C♯','G♯','D♯','A♯','E♯','B♯'],ys:[52,76,44,68,92,60,84],keys:['C','G','D','A','E','B','F♯','C♯'],pcs:[6,1,8,3,10,5,0],rule:'The major key is one semitone above the last sharp.'},
+      flat:{symbol:'♭',order:['B♭','E♭','A♭','D♭','G♭','C♭','F♭'],ys:[84,60,92,68,100,76,108],keys:['C','F','B♭','E♭','A♭','D♭','G♭','C♭'],pcs:[10,3,8,1,6,11,4],rule:'The second-to-last flat names the major key. One flat is F major.'}
+    };
+    const COLORS=['#ff7870','#f7c963','#63d5ff','#c38cff','#78dfa9','#ff9f55','#f27bca'];
+    const STRINGS=[{name:'G',pc:7,thick:'3px'},{name:'D',pc:2,thick:'2.5px'},{name:'A',pc:9,thick:'2px'},{name:'E',pc:4,thick:'1.5px'}];
+    const LABELS={G:['OPEN','LOW 1','1','LOW 2','HIGH 2','3','HIGH 3','4'],D:['OPEN','LOW 1','1','LOW 2','HIGH 2','3','HIGH 3','4'],A:['OPEN','LOW 1','1','LOW 2','HIGH 2','3','HIGH 3','4'],E:['OPEN','LOW 1','HIGH 1','LOW 2','HIGH 2','3','HIGH 3','4']};
+    const $=s=>document.querySelector(s),E={slots:$('#slotLayer'),order:$('#orderStrip'),key:$('#keyName'),explain:$('#keyExplain'),result:$('#keyResult'),formula:$('#formula'),fingerboard:$('#fingerboard'),effects:$('#effects'),toast:$('#toast'),sound:$('#soundBtn'),target:$('#target'),stars:$('#stars'),challengeText:$('#challengeText')};
+    let mode='sharp',selected=new Set(),showNames=true,soundOn=true,audio=null,challenge=null,stars=Number(localStorage.getItem('violinKeyStars')||0);E.stars.textContent='★ '+stars;
+    function renderSlots(){const m=MODES[mode];E.slots.innerHTML='';m.order.forEach((note,i)=>{const b=document.createElement('button');b.type='button';b.className='slot'+(selected.has(i)?' selected':'');b.style.left=(25+i*8.7)+'%';b.style.top=(m.ys[i]/180*100)+'%';b.style.setProperty('--slot',COLORS[i]);b.setAttribute('aria-pressed',selected.has(i));b.setAttribute('aria-label',`${note}, ${positionName(m.ys[i])}`);b.innerHTML=`${m.symbol}<span class="tiny">${showNames?note:''}</span>`;b.onclick=()=>toggle(i);E.slots.append(b)});renderOrder()}
+    function positionName(y){const lines={52:'top line',68:'fourth line',84:'middle line',100:'second line',116:'bottom line'},spaces={44:'space above staff',60:'top space',76:'third space',92:'second space',108:'bottom space'};return lines[y]||spaces[y]||'staff position'}
+    function renderOrder(){const m=MODES[mode];E.order.innerHTML=m.order.map((n,i)=>`<span class="order-chip ${selected.has(i)?'on':''}" style="--chip:${COLORS[i]}">${i+1}. ${n}</span>`).join('')}
+    function toggle(i){selected.has(i)?selected.delete(i):selected.add(i);pluck(330+i*42);renderAll()}
+    function setMode(next){if(next===mode)return;mode=next;selected.clear();challenge=null;E.target.textContent='Ready?';E.challengeText.textContent='Press the button, then build the mystery major key on the staff.';renderAll()}
+    function validCount(){if(!selected.size)return 0;const max=Math.max(...selected);for(let i=0;i<=max;i++)if(!selected.has(i))return-1;return selected.size===max+1?selected.size:-1}
+    function renderAnswer(){const m=MODES[mode],count=validCount(),notes=[...selected].sort((a,b)=>a-b).map(i=>m.order[i]);if(count>=0){const key=m.keys[count];E.result.className='key-result valid';E.key.textContent=key+' MAJOR';E.explain.textContent=count===0?'No sharps or flats. All notes are natural.':`${count} ${mode}${count>1?'s':''}: ${notes.join(' · ')}`;E.formula.innerHTML=count===0?'<strong>C major</strong> is the home base: zero accidentals.':`<strong>${m.rule}</strong><br>Standard ${mode} order: ${m.order.join(' → ')}.`;checkChallenge(key)}else{E.result.className='key-result invalid';E.key.textContent='NOT A KEY YET';const missing=[];for(let i=0;i<=Math.max(...selected);i++)if(!selected.has(i))missing.push(m.order[i]);E.explain.textContent=`Add ${missing.join(', ')} first. Key signatures build in order.`;E.formula.innerHTML=`<strong>${m.symbol} order:</strong> ${m.order.join(' → ')}. You may click positions in any sequence, but the finished set cannot skip one.`}}
+    function renderFingerboard(){const m=MODES[mode],active=[...selected].sort((a,b)=>a-b),hits=[];E.fingerboard.innerHTML='';STRINGS.forEach(s=>{const row=document.createElement('div');row.className='string-row';row.style.setProperty('--thick',s.thick);row.innerHTML=`<div class="string-name">${s.name}</div>`;for(let semitone=0;semitone<=7;semitone++){const dot=document.createElement('div'),idx=active.find(i=>(m.pcs[i]-s.pc+12)%12===semitone);dot.className='finger'+(semitone===0?' open':'');dot.textContent=LABELS[s.name][semitone];if(idx!==undefined){dot.classList.add('hit');dot.style.setProperty('--hit',COLORS[idx]);dot.dataset.note=m.order[idx];hits.push({idx,string:s.name,label:LABELS[s.name][semitone],semitone})}row.append(dot)}E.fingerboard.append(row)});renderEffects(hits)}
+    function renderEffects(hits){const m=MODES[mode],active=[...selected].sort((a,b)=>a-b);if(!active.length){E.effects.innerHTML='<div class="empty">Add a ♯ or ♭ on the staff.<br>The affected fingers will light up here.</div>';return}E.effects.innerHTML=active.map(i=>{const h=hits.filter(x=>x.idx===i),detail=h.length?h.map(x=>`${x.string} string: <strong>${friendly(x.label)}</strong>`).join('<br>'):'No first-position occurrence on these four strings.';return`<article class="effect" style="--effect:${COLORS[i]}"><h3>${m.order[i]} affects…</h3><p>${detail}</p></article>`}).join('')}
+    function friendly(label){if(label==='OPEN')return'open string';if(label==='1'||label==='3'||label==='4')return`finger ${label} (normal)`;const [pos,num]=label.split(' ');return`${pos.toLowerCase()} finger ${num}`}
+    function renderAll(){renderSlots();renderAnswer();renderFingerboard()}
+    function addNext(){const m=MODES[mode];for(let i=0;i<7;i++)if(!selected.has(i)){selected.add(i);pluck(390+i*45);renderAll();return}toast('All seven are on the staff!')}
+    function startChallenge(){const types=['sharp','flat'];mode=types[Math.floor(Math.random()*2)];const count=1+Math.floor(Math.random()*7),key=MODES[mode].keys[count];selected.clear();challenge={mode,key,count,won:false};document.querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));E.target.textContent='Build '+key+' major';E.challengeText.textContent=`Place the correct ${MODES[mode].symbol} symbols. The finger map may help!`;renderAll();toast('Detective mission started!')}
+    function checkChallenge(key){if(!challenge||challenge.won||challenge.mode!==mode||key!==challenge.key)return;challenge.won=true;stars++;localStorage.setItem('violinKeyStars',stars);E.stars.textContent='★ '+stars;E.challengeText.textContent='Brilliant! You found the key and its violin finger pattern.';toast('🎉 KEY DETECTIVE STAR!');confetti();successSound()}
+    function toast(text){E.toast.textContent=text;E.toast.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>E.toast.classList.remove('show'),1700)}
+    function confetti(){for(let i=0;i<34;i++){const c=document.createElement('i');c.className='confetti';c.style.setProperty('--c',COLORS[i%7]);c.style.setProperty('--x',(Math.random()*520-260)+'px');c.style.setProperty('--y',(Math.random()*-380+120)+'px');document.body.append(c);setTimeout(()=>c.remove(),950)}}
+    function audioReady(){if(!soundOn)return null;try{audio ||=new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();return audio}catch{return null}}
+    function pluck(freq){const a=audioReady();if(!a)return;const o=a.createOscillator(),g=a.createGain(),t=a.currentTime;o.type='triangle';o.frequency.setValueAtTime(freq,t);o.frequency.exponentialRampToValueAtTime(freq*.99,t+.25);g.gain.setValueAtTime(.08,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+.31)}
+    function successSound(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>pluck(f),i*90))}
+    document.querySelectorAll('.mode').forEach(b=>b.onclick=()=>{document.querySelectorAll('.mode').forEach(x=>x.classList.toggle('active',x===b));setMode(b.dataset.mode)});
+    $('#nextBtn').onclick=addNext;$('#clearBtn').onclick=()=>{selected.clear();renderAll();pluck(220)};$('#orderBtn').onclick=e=>{showNames=!showNames;e.currentTarget.textContent=showNames?'Hide note names':'Show note names';renderSlots()};$('#challengeBtn').onclick=startChallenge;E.sound.onclick=()=>{soundOn=!soundOn;E.sound.textContent=soundOn?'🔊 SOUND ON':'🔇 SOUND OFF';if(soundOn)pluck(440)};
+    renderAll();
+  })();
+  </script>
+</body>
+</html>
