@@ -1,39 +1,421 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ryan's Violin Key Finder</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ryan's Violin Key Finder</title>
   <style>
-    :root{--ink:#fffaf1;--muted:#c7b9ab;--night:#18131b;--panel:#281e29;--gold:#f6c85f;--green:#72dfa8;--red:#ff7770;--line:#574653}*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:"Trebuchet MS","Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 8% 0,#562b35 0,transparent 28%),radial-gradient(circle at 92% 10%,#153c50 0,transparent 26%),var(--night)}button{font:inherit}.app{width:min(1500px,100%);margin:auto;padding:16px;display:grid;gap:14px}header{display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{display:flex;align-items:center;gap:12px}.logo{width:60px;height:60px;border-radius:19px;display:grid;place-items:center;background:linear-gradient(145deg,#e08047,#74361f);border:2px solid #ffc699;font-size:2rem;box-shadow:0 0 26px #df794866}.brand h1{margin:0;font-size:clamp(1.35rem,3vw,2.1rem)}.brand p{margin:3px 0 0;color:var(--muted);font-weight:800}.sound{border:1px solid #735d70;border-radius:999px;background:#211922;color:var(--ink);padding:10px 14px;font-weight:900;cursor:pointer}main{display:grid;grid-template-columns:1fr;gap:14px}.card{border:1px solid var(--line);border-radius:24px;background:linear-gradient(155deg,#302532f2,#201820f2);box-shadow:0 18px 50px #0006}.staff-card{padding:18px}.title-row{display:flex;align-items:center;justify-content:space-between;gap:10px}.title-row h2{margin:0;font-size:1.2rem}.step{color:var(--gold);font-size:.75rem;font-weight:1000;letter-spacing:.09em}.instruction{margin:10px 0 13px;border-radius:14px;background:#191319;border:1px solid #56434f;padding:10px 12px;color:#d8cbd0;font-weight:800;line-height:1.45}.instruction b{color:#fff}.cycle{display:inline-flex;gap:4px;align-items:center}.cycle i{font-style:normal;border-radius:8px;padding:2px 7px;background:#3b2c36;color:var(--gold)}
-    .staff-wrap{position:relative;height:480px;border:6px solid #8b4a2d;border-radius:24px;overflow:hidden;background:#fffaf1;box-shadow:inset 0 0 30px #7545262d}.manual-staff{position:absolute;inset:0;pointer-events:none}.staff-line{position:absolute;left:4%;right:4%;height:3px;background:#34281f;transform:translateY(-50%)}.staff-line::before,.staff-line::after{content:"";position:absolute;top:-1px;width:3px;height:3px;background:#34281f}.staff-line::before{left:0}.staff-line::after{right:0}.clef{position:absolute;left:4.7%;top:16%;font:400 10rem/1 "Segoe UI Symbol","Noto Music",serif;color:#2b211a}.hit-layer{position:absolute;inset:0}.staff-hit{position:absolute;left:13%;width:84%;height:7.5%;transform:translateY(-50%);border:0;border-radius:10px;background:transparent;cursor:pointer}.staff-hit:hover,.staff-hit:focus-visible{outline:3px dashed #c99435;background:#f6c85f2c}.staff-hit::after{display:none}.placed{position:absolute;top:50%;left:calc(7% + var(--order)*9%);transform:translate(-50%,-50%);font:900 2.15rem Georgia,serif;color:var(--acc);text-shadow:0 2px 0 #fff,0 0 8px var(--acc);animation:pop .3s ease}.placed small{position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);font:900 .52rem "Trebuchet MS";color:#604c40;white-space:nowrap}.staff-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.action{border:1px solid #745e70;border-radius:12px;background:#1b151b;color:var(--ink);padding:11px 16px;font-weight:900;cursor:pointer}.action.primary{background:var(--gold);color:#2d210d;border-color:#ffe3a0}.selection-line{margin-top:11px;min-height:31px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}.sel-chip{border-radius:999px;padding:7px 11px;background:#171117;border:1px solid var(--c);color:var(--c);font-weight:1000}
-    .answer{padding:18px;display:flex;flex-direction:column;gap:12px}.result{border-radius:21px;border:2px solid var(--green);background:radial-gradient(circle at 50% 0,#3e705f55,transparent 62%),#181218;padding:20px;text-align:center}.result.invalid{border-color:var(--red);background:radial-gradient(circle at 50% 0,#813c4255,transparent 62%),#181218}.result-label{font-size:.72rem;color:var(--muted);font-weight:1000;letter-spacing:.12em}.key-name{font-size:clamp(2.2rem,6vw,4.2rem);font-weight:1000;color:var(--gold);line-height:1.04;margin:6px 0}.key-message{color:#d6c8ce;font-weight:800;line-height:1.45;min-height:54px}.why{border-radius:16px;background:#181218;border:1px solid #51404d;padding:12px;color:var(--muted);font-weight:800;line-height:1.5}.why strong{color:#fff}.mini-order{display:grid;gap:8px}.order-row{border-radius:13px;padding:10px;background:#1a141a;color:#d3c5ce;font-size:.82rem;font-weight:900}.order-row b{color:var(--gold);font-size:1rem}.tip{margin-top:auto;color:var(--muted);font-size:.8rem;line-height:1.45;border-top:1px solid #51404d;padding-top:11px}
-    .violin-card{padding:18px}.violin-layout{display:grid;grid-template-columns:1fr;gap:18px;margin-top:12px}.neck-stage{min-height:600px;border-radius:24px;background:radial-gradient(circle at 50% 22%,#5b3140,transparent 35%),linear-gradient(155deg,#171218,#2d1d25);border:1px solid #5d4655;display:grid;place-items:center;overflow:hidden;position:relative}.neck-stage::before{content:"WIDE FINGERBOARD · TRUE SEMITONE SPACING";position:absolute;top:12px;left:14px;color:#a7959e;font-size:.72rem;font-weight:1000;letter-spacing:.1em}.neck-svg{width:100%;height:auto;min-height:540px;display:block}.effect-side{display:flex;flex-direction:column;gap:10px}.effect-side h3{margin:0;font-size:1.1rem}.effect-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.empty{border:1px dashed #715a6c;border-radius:18px;padding:32px 18px;text-align:center;color:var(--muted);font-weight:900;line-height:1.5}.effect{border-radius:15px;background:#181218;border-left:7px solid var(--c);padding:13px 14px}.effect h4{margin:0 0 5px;color:var(--c);font-size:1.1rem}.effect p{margin:0;color:#d5c9cf;font-size:.9rem;font-weight:800;line-height:1.55}.effect strong{color:#fff}.finger-summary{border-radius:16px;background:#201821;border:1px solid #584653;padding:12px;color:var(--muted);font-size:.82rem;line-height:1.5}.finger-summary strong{color:#fff}.toast{position:fixed;left:50%;top:18px;z-index:30;transform:translate(-50%,-140%);border-radius:999px;background:var(--gold);color:#2d1e0b;padding:10px 18px;font-weight:1000;box-shadow:0 10px 35px #0008;transition:.3s}.toast.show{transform:translate(-50%,0)}@keyframes pop{50%{transform:translate(-50%,-50%) scale(1.25)}}@keyframes glow{50%{filter:drop-shadow(0 0 12px var(--c))}}@media(max-width:900px){.effect-list{grid-template-columns:1fr 1fr}.brand p{display:none}.staff-wrap{height:420px}}@media(max-width:600px){.app{padding:9px}.staff-card,.answer,.violin-card{padding:12px}.sound{display:none}.staff-wrap{height:360px}.placed{font-size:1.75rem}.clef{font-size:7.3rem;left:3.5%;top:18%}.staff-hit{left:13%;width:84%;height:8%}.effect-list{grid-template-columns:1fr}.neck-stage{min-height:440px}.neck-svg{min-height:420px}}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+    :root {
+      --ink: #17202a;
+      --muted: #65717d;
+      --paper: #fffdf7;
+      --line: #1f2933;
+      --blue: #176b87;
+      --blue-soft: #e7f6fb;
+      --red: #b83a43;
+      --border: #ccd5dc;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: #eef3f5;
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    button { font: inherit; }
+
+    .page {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 22px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.55rem, 4vw, 2.2rem);
+    }
+
+    .intro {
+      margin: 6px 0 18px;
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 650;
+    }
+
+    .panel {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: white;
+      box-shadow: 0 12px 34px rgba(36, 54, 66, .10);
+    }
+
+    .staff-scroll {
+      overflow-x: auto;
+      padding: 14px;
+      background: var(--paper);
+    }
+
+    .staff {
+      position: relative;
+      width: 100%;
+      min-width: 720px;
+      height: 540px;
+      background: var(--paper);
+      border: 1px solid #ddd8ca;
+      border-radius: 12px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .staff-line {
+      position: absolute;
+      left: 42px;
+      right: 42px;
+      height: 2px;
+      background: var(--line);
+      transform: translateY(-1px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .clef {
+      position: absolute;
+      left: 50px;
+      top: 270px;
+      z-index: 2;
+      transform: translateY(-51%);
+      color: var(--ink);
+      font: 400 126px/1 "Segoe UI Symbol", "Noto Music", serif;
+      pointer-events: none;
+    }
+
+    .hit {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 44px;
+      transform: translateY(-22px);
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .hit:hover,
+    .hit:focus-visible {
+      background: rgba(23, 107, 135, .08);
+      outline: 2px solid rgba(23, 107, 135, .42);
+      outline-offset: -2px;
+    }
+
+    .marker {
+      position: absolute;
+      z-index: 4;
+      width: 18px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      transform: translate(-50%, -50%);
+      color: #0b0f12;
+      font: 700 17px/1 Georgia, "Times New Roman", serif;
+      pointer-events: none;
+    }
+
+    .marker.flat { transform: translate(-50%, -54%); }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      padding: 14px;
+      border-top: 1px solid var(--border);
+      background: #f8fafb;
+    }
+
+    .controls button {
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid #9aa8b3;
+      border-radius: 10px;
+      background: white;
+      color: var(--ink);
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .controls button:hover,
+    .controls button:focus-visible { border-color: var(--blue); }
+
+    .answer {
+      margin-top: 16px;
+      padding: 20px 22px;
+    }
+
+    .key-name {
+      margin: 0;
+      color: var(--blue);
+      font-size: clamp(2rem, 7vw, 3.4rem);
+      line-height: 1.05;
+      font-weight: 850;
+      letter-spacing: .01em;
+    }
+
+    .key-name.invalid { color: var(--red); font-size: clamp(1.45rem, 5vw, 2.3rem); }
+
+    .changes {
+      margin: 15px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 7px;
+    }
+
+    .changes li {
+      padding: 10px 12px;
+      border-left: 4px solid var(--blue);
+      background: var(--blue-soft);
+      border-radius: 0 8px 8px 0;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .simple-message {
+      margin: 13px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 650;
+    }
+
+    @media (max-width: 620px) {
+      .page { padding: 12px; }
+      .staff-scroll { padding: 8px; }
+      .answer { padding: 17px; }
+      .intro { margin-bottom: 12px; }
+    }
   </style>
 </head>
-<body><div class="app">
-  <header><div class="brand"><div class="logo">🎻</div><div><h1>RYAN'S VIOLIN KEY FINDER</h1><p>Click the staff. Name the key. Place the fingers.</p></div></div><button class="sound" id="soundBtn" type="button">🔊 SOUND ON</button></header>
-  <main>
-    <section class="card staff-card"><div class="title-row"><h2>Choose positions on the staff</h2><span class="step">1 · CLICK</span></div><div class="instruction"><b>Click any line or space.</b> <span class="cycle"><i>1× = ♯</i><i>2× = ♭</i><i>3× = clear</i></span> You can choose any combination.</div>
-      <div class="staff-wrap" aria-label="Free interactive treble staff"><div class="manual-staff" aria-hidden="true"><i class="staff-line" style="top:18.182%"></i><i class="staff-line" style="top:34.545%"></i><i class="staff-line" style="top:50.909%"></i><i class="staff-line" style="top:67.273%"></i><i class="staff-line" style="top:83.636%"></i><span class="clef">𝄞</span></div><div class="hit-layer" id="hitLayer"></div></div>
-      <div class="staff-actions"><button class="action primary" id="undoBtn" type="button">↶ Undo</button><button class="action" id="clearBtn" type="button">Clear all</button></div><div class="selection-line" id="selectionLine"></div>
+<body>
+  <main class="page">
+    <h1>Violin Key Finder</h1>
+    <p class="intro">Tap a line or space: 1 tap = ♯, 2 taps = ♭, 3 taps = clear.</p>
+
+    <section class="panel" aria-label="Choose a key signature">
+      <div class="staff-scroll">
+        <div class="staff" id="staff" aria-label="Interactive treble clef staff">
+          <i class="staff-line" style="top:90px"></i>
+          <i class="staff-line" style="top:180px"></i>
+          <i class="staff-line" style="top:270px"></i>
+          <i class="staff-line" style="top:360px"></i>
+          <i class="staff-line" style="top:450px"></i>
+          <span class="clef" aria-hidden="true">𝄞</span>
+          <div id="hitLayer"></div>
+          <div id="markerLayer" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="controls">
+        <button type="button" id="undoBtn">Undo</button>
+        <button type="button" id="clearBtn">Clear</button>
+      </div>
     </section>
-    <aside class="card answer"><div class="title-row"><h2>Major key</h2><span class="step">2 · RESULT</span></div><div class="result" id="result"><div class="result-label">YOUR KEY IS</div><div class="key-name" id="keyName">C MAJOR</div><div class="key-message" id="keyMessage">No sharps or flats.</div></div><div class="why" id="why"><strong>C major</strong> uses only natural notes.</div><div class="mini-order"><div class="order-row"><b>♯</b> F · C · G · D · A · E · B</div><div class="order-row"><b>♭</b> B · E · A · D · G · C · F</div></div><div class="tip">A real major key signature uses only sharps or only flats, and it cannot skip a note in the standard order. If the exact positions do not form a major key, the result will say so.</div></aside>
-    <section class="card violin-card"><div class="title-row"><h2>Violin neck & finger positions</h2><span class="step">3 · PLAY</span></div><div class="violin-layout"><div class="neck-stage"><svg class="neck-svg" id="neckSvg" viewBox="0 0 1100 520" role="img" aria-label="Large straight violin fingerboard with four widely spaced strings"></svg></div><div class="effect-side"><h3>What changes?</h3><div class="effect-list" id="effectList"></div><div class="finger-summary"><strong>Guide:</strong> standard tuning G–D–A–E, first position. The fingerboard is straight and the finger marks use real equal-temperament spacing: each next semitone is slightly closer to the violin body. “High” moves towards the body; “low” moves towards the scroll.</div></div></div></section>
+
+    <section class="panel answer" aria-live="polite">
+      <h2 class="key-name" id="keyName">C MAJOR</h2>
+      <ul class="changes" id="changes"></ul>
+      <p class="simple-message" id="message">No finger changes.</p>
+    </section>
   </main>
-</div><div class="toast" id="toast" role="status"></div>
-<script>
-(()=>{
-  const POSITIONS=[{id:'G5',letter:'G',y:22,label:'G5 · space above'},{id:'F5',letter:'F',y:40,label:'F5 · top line'},{id:'E5',letter:'E',y:58,label:'E5 · top space'},{id:'D5',letter:'D',y:76,label:'D5 · fourth line'},{id:'C5',letter:'C',y:94,label:'C5 · third space'},{id:'B4',letter:'B',y:112,label:'B4 · middle line'},{id:'A4',letter:'A',y:130,label:'A4 · second space'},{id:'G4',letter:'G',y:148,label:'G4 · second line'},{id:'F4',letter:'F',y:166,label:'F4 · bottom space'},{id:'E4',letter:'E',y:184,label:'E4 · bottom line'}];
-  const RULES={sharp:{positions:['F5','C5','G5','D5','A4','E5','B4'],keys:['C','G','D','A','E','B','F♯','C♯'],symbol:'♯',name:'sharp'},flat:{positions:['B4','E5','A4','D5','G4','C5','F4'],keys:['C','F','B♭','E♭','A♭','D♭','G♭','C♭'],symbol:'♭',name:'flat'}};
-  const COLORS=['#ff7b72','#f5c85f','#63d0ff','#bd8cff','#74dfa5','#ff9d55','#ef7bc9','#91c76d','#de8cff','#7edbd4'],NATURAL={C:0,D:2,E:4,F:5,G:7,A:9,B:11},STRINGS=[{name:'G',pc:7,y:115},{name:'D',pc:2,y:215},{name:'A',pc:9,y:315},{name:'E',pc:4,y:415}],FINGER_LABELS={G:['OPEN','LOW 1','1','LOW 2','HIGH 2','3','HIGH 3','4'],D:['OPEN','LOW 1','1','LOW 2','HIGH 2','3','HIGH 3','4'],A:['OPEN','LOW 1','1','LOW 2','HIGH 2','3','HIGH 3','4'],E:['OPEN','LOW 1','HIGH 1','LOW 2','HIGH 2','3','HIGH 3','4']},NUT_X=150,END_X=1030,XPOS=Array.from({length:8},(_,n)=>NUT_X+(END_X-NUT_X)*(1-Math.pow(2,-n/12))/(1-Math.pow(2,-7/12))),$=s=>document.querySelector(s),E={layer:$('#hitLayer'),selection:$('#selectionLine'),result:$('#result'),key:$('#keyName'),message:$('#keyMessage'),why:$('#why'),neck:$('#neckSvg'),effects:$('#effectList'),toast:$('#toast'),sound:$('#soundBtn')};
-  let state=new Map(),history=[],soundOn=true,audio=null;
-  function position(id){return POSITIONS.find(p=>p.id===id)}function save(){history.push(new Map(state));if(history.length>30)history.shift()}function cycle(id){save();const current=state.get(id);if(!current)state.set(id,'sharp');else if(current==='sharp')state.set(id,'flat');else state.delete(id);pluck(current?294:392);render()}function undo(){if(!history.length){toast('Nothing to undo');return}state=history.pop();render();pluck(260)}
-  function renderStaff(){E.layer.innerHTML='';const ids=[...state.keys()];POSITIONS.forEach(pos=>{const type=state.get(pos.id),order=ids.indexOf(pos.id),b=document.createElement('button');b.type='button';b.className='staff-hit';b.style.top=(pos.y/220*100)+'%';b.dataset.position=pos.label;b.setAttribute('aria-label',`${pos.label}. ${type?RULES[type].name:'natural'}. Click to change.`);b.onclick=()=>cycle(pos.id);if(type){const note=pos.letter+RULES[type].symbol;b.innerHTML=`<span class="placed" style="--order:${order};--acc:${COLORS[POSITIONS.indexOf(pos)]}">${RULES[type].symbol}<small>${note}</small></span>`}E.layer.append(b)});E.selection.innerHTML=ids.length?ids.map(id=>{const pos=position(id),type=state.get(id),note=pos.letter+RULES[type].symbol;return`<span class="sel-chip" style="--c:${COLORS[POSITIONS.indexOf(pos)]}">${note} on ${pos.id}</span>`}).join(''):'<span style="color:var(--muted);font-weight:800">Nothing selected — C major</span>'}
-  function detect(){if(!state.size)return{valid:true,key:'C',type:null,count:0};const types=new Set(state.values());if(types.size!==1)return{valid:false,reason:'A major key signature cannot mix sharps and flats.'};const type=[...types][0],rule=RULES[type],chosen=new Set(state.keys()),count=chosen.size,expected=new Set(rule.positions.slice(0,count)),valid=count<=7&&chosen.size===expected.size&&[...chosen].every(x=>expected.has(x));if(valid)return{valid:true,key:rule.keys[count],type,count};const missing=[...expected].filter(x=>!chosen.has(x)).map(id=>position(id).letter+rule.symbol),extra=[...chosen].filter(x=>!expected.has(x)).map(id=>position(id).letter+rule.symbol);return{valid:false,type,reason:`This is not a standard major key signature.${missing.length?' Missing: '+missing.join(', ')+'.':''}${extra.length?' Wrong position: '+extra.join(', ')+'.':''}`,expected:rule.positions.slice(0,Math.min(count,7)).map(id=>position(id).letter+rule.symbol).join(' · ')}}
-  function renderResult(){const r=detect();E.result.classList.toggle('invalid',!r.valid);if(r.valid){E.key.textContent=r.key+' MAJOR';E.message.textContent=r.count?`${r.count} ${r.type}${r.count>1?'s':''} in the correct staff positions.`:'No sharps or flats.';E.why.innerHTML=r.count?`<strong>${r.key} major</strong> matches this exact ${r.type} combination and placement.`:'<strong>C major</strong> uses only natural notes.'}else{E.key.textContent='NO MAJOR KEY';E.message.textContent=r.reason;E.why.innerHTML=r.expected?`For ${state.size} ${r.type}${state.size>1?'s':''}, the staff should contain: <strong>${r.expected}</strong>.`:'Change the symbols so they are all sharps or all flats.'}}
-  function accidentalGroups(){const groups=new Map();for(const [id,type] of state){const pos=position(id),name=pos.letter+RULES[type].symbol,key=name+'|'+type;if(!groups.has(key)){const pc=(NATURAL[pos.letter]+(type==='sharp'?1:-1)+12)%12;groups.set(key,{name,type,pc,color:COLORS[POSITIONS.indexOf(pos)],hits:[]})}}for(const g of groups.values())for(const s of STRINGS){const semitone=(g.pc-s.pc+12)%12;if(semitone<=7)g.hits.push({string:s.name,semitone,label:FINGER_LABELS[s.name][semitone],x:XPOS[semitone],y:s.y})}return[...groups.values()]}
-  function renderNeck(){const groups=accidentalGroups(),markers=groups.flatMap(g=>g.hits.map(h=>({...h,note:g.name,color:g.color})));E.neck.innerHTML=`<defs><linearGradient id="wideWood" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#d88a51"/><stop offset=".5" stop-color="#8b482b"/><stop offset="1" stop-color="#5c2d20"/></linearGradient><linearGradient id="wideBoard" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#3b2c30"/><stop offset=".5" stop-color="#171216"/><stop offset="1" stop-color="#332328"/></linearGradient></defs><rect x="88" y="48" width="980" height="420" rx="28" fill="url(#wideWood)" stroke="#efaa72" stroke-width="5"/><rect x="118" y="68" width="930" height="380" rx="12" fill="url(#wideBoard)" stroke="#0c090b" stroke-width="6"/><rect x="${NUT_X-7}" y="68" width="14" height="380" rx="4" fill="#f5e2bd"/><text x="${NUT_X}" y="32" text-anchor="middle" fill="#f5d79d" font-size="18" font-weight="1000">NUT</text><text x="32" y="30" fill="#b8a5af" font-size="15" font-weight="900">SCROLL ←</text><text x="1068" y="30" text-anchor="end" fill="#b8a5af" font-size="15" font-weight="900">BODY →</text>${XPOS.slice(1).map((x,i)=>`<g><line x1="${x}" x2="${x}" y1="68" y2="448" stroke="#8f747b" stroke-width="2" stroke-dasharray="7 7" opacity=".7"/><text x="${x}" y="61" text-anchor="middle" fill="#d1bfc6" font-size="13" font-weight="900">+${i+1}</text></g>`).join('')}${STRINGS.map((s,i)=>`<g><circle cx="58" cy="${s.y}" r="31" fill="#f3cf8c" stroke="#744329" stroke-width="4"/><text x="58" y="${s.y+8}" text-anchor="middle" fill="#342014" font-size="25" font-weight="1000">${s.name}</text><line x1="100" x2="1050" y1="${s.y}" y2="${s.y}" stroke="#f3e5c6" stroke-width="${7-i}"/><line x1="100" x2="1050" y1="${s.y+3}" y2="${s.y+3}" stroke="#6d5d50" stroke-width="2" opacity=".8"/></g>`).join('')}${markers.map(m=>`<g style="--c:${m.color};animation:glow 1.15s ease-in-out infinite"><circle cx="${m.x}" cy="${m.y}" r="34" fill="${m.color}" stroke="#fff8df" stroke-width="5"/><text x="${m.x}" y="${m.y+7}" text-anchor="middle" fill="#21161b" font-size="17" font-weight="1000">${shortLabel(m.label)}</text><rect x="${m.x-28}" y="${m.y-60}" width="56" height="26" rx="13" fill="#fff"/><text x="${m.x}" y="${m.y-41}" text-anchor="middle" fill="#26171c" font-size="15" font-weight="1000">${m.note}</text></g>`).join('')}<text x="590" y="497" text-anchor="middle" fill="#b6a3ad" font-size="15" font-weight="900">REAL SEMITONE RATIO · SPACES GET CLOSER TOWARDS THE BODY</text>`;renderEffects(groups)}
-  function shortLabel(label){if(label==='OPEN')return'OPEN';return label.replace('HIGH','H').replace('LOW','L')}function describe(label){if(label==='OPEN')return'open string';if(/^\d$/.test(label))return`finger ${label} · normal`;const [move,num]=label.split(' ');return`finger ${num} · ${move.toLowerCase()}`}function renderEffects(groups){if(!groups.length){E.effects.innerHTML='<div class="empty">Click a staff line or space.<br>The violin neck will show the affected fingers.</div>';return}E.effects.innerHTML=groups.map(g=>`<article class="effect" style="--c:${g.color}"><h4>${g.name} changes</h4><p>${g.hits.length?g.hits.map(h=>`${h.string} string · <strong>${describe(h.label)}</strong>`).join('<br>'):'No occurrence in the shown first-position range.'}</p></article>`).join('')}
-  function render(){renderStaff();renderResult();renderNeck()}function audioReady(){if(!soundOn)return null;try{audio ||=new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();return audio}catch{return null}}function pluck(freq){const a=audioReady();if(!a)return;const o=a.createOscillator(),g=a.createGain(),t=a.currentTime;o.type='triangle';o.frequency.value=freq;g.gain.setValueAtTime(.055,t);g.gain.exponentialRampToValueAtTime(.001,t+.25);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+.26)}function toast(text){E.toast.textContent=text;E.toast.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>E.toast.classList.remove('show'),1200)}
-  $('#undoBtn').onclick=undo;$('#clearBtn').onclick=()=>{if(!state.size)return;save();state.clear();render();pluck(220)};E.sound.onclick=()=>{soundOn=!soundOn;E.sound.textContent=soundOn?'🔊 SOUND ON':'🔇 SOUND OFF';if(soundOn)pluck(440)};render();
-})();
-</script></body></html>
+
+  <script>
+    (() => {
+      const POSITIONS = [
+        { id: 'G5', letter: 'G', y: 45,  place: 'space above the staff' },
+        { id: 'F5', letter: 'F', y: 90,  place: 'top line' },
+        { id: 'E5', letter: 'E', y: 135, place: 'top space' },
+        { id: 'D5', letter: 'D', y: 180, place: 'fourth line' },
+        { id: 'C5', letter: 'C', y: 225, place: 'third space' },
+        { id: 'B4', letter: 'B', y: 270, place: 'middle line' },
+        { id: 'A4', letter: 'A', y: 315, place: 'second space' },
+        { id: 'G4', letter: 'G', y: 360, place: 'second line' },
+        { id: 'F4', letter: 'F', y: 405, place: 'bottom space' },
+        { id: 'E4', letter: 'E', y: 450, place: 'bottom line' }
+      ];
+
+      const RULES = {
+        sharp: {
+          symbol: '♯',
+          positions: ['F5', 'C5', 'G5', 'D5', 'A4', 'E5', 'B4'],
+          keys: ['C', 'G', 'D', 'A', 'E', 'B', 'F♯', 'C♯']
+        },
+        flat: {
+          symbol: '♭',
+          positions: ['B4', 'E5', 'A4', 'D5', 'G4', 'C5', 'F4'],
+          keys: ['C', 'F', 'B♭', 'E♭', 'A♭', 'D♭', 'G♭', 'C♭']
+        }
+      };
+
+      const NATURAL = { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 };
+      const STRINGS = [
+        { name: 'G', pitch: 7 },
+        { name: 'D', pitch: 2 },
+        { name: 'A', pitch: 9 },
+        { name: 'E', pitch: 4 }
+      ];
+      const FINGERS = {
+        G: ['OPEN', '1', '1', '2', '2', '3', '3', '4'],
+        D: ['OPEN', '1', '1', '2', '2', '3', '3', '4'],
+        A: ['OPEN', '1', '1', '2', '2', '3', '3', '4'],
+        E: ['OPEN', '1', '1', '2', '2', '3', '3', '4']
+      };
+
+      const hitLayer = document.querySelector('#hitLayer');
+      const markerLayer = document.querySelector('#markerLayer');
+      const keyName = document.querySelector('#keyName');
+      const changes = document.querySelector('#changes');
+      const message = document.querySelector('#message');
+      const undoBtn = document.querySelector('#undoBtn');
+      const clearBtn = document.querySelector('#clearBtn');
+
+      let selected = new Map();
+      let history = [];
+
+      function remember() {
+        history.push(new Map(selected));
+        if (history.length > 40) history.shift();
+      }
+
+      function cycle(id) {
+        remember();
+        const value = selected.get(id);
+        if (!value) selected.set(id, 'sharp');
+        else if (value === 'sharp') selected.set(id, 'flat');
+        else selected.delete(id);
+        render();
+      }
+
+      function detectKey() {
+        if (selected.size === 0) return { valid: true, name: 'C', type: null, count: 0 };
+        const types = new Set(selected.values());
+        if (types.size !== 1) return { valid: false };
+
+        const type = [...types][0];
+        const rule = RULES[type];
+        const chosen = new Set(selected.keys());
+        const expected = rule.positions.slice(0, chosen.size);
+        const valid = chosen.size <= rule.positions.length &&
+          expected.every(id => chosen.has(id));
+
+        return valid
+          ? { valid: true, name: rule.keys[chosen.size], type, count: chosen.size }
+          : { valid: false };
+      }
+
+      function fingerChanges(type, count) {
+        if (!type || count === 0) return [];
+        const rule = RULES[type];
+        const direction = type === 'sharp' ? 'HIGHER / SHARPER' : 'LOWER / FLATTER';
+        const rows = [];
+
+        rule.positions.slice(0, count).forEach(positionId => {
+          const position = POSITIONS.find(item => item.id === positionId);
+          const pitch = (NATURAL[position.letter] + (type === 'sharp' ? 1 : -1) + 12) % 12;
+          const note = position.letter + rule.symbol;
+
+          STRINGS.forEach(string => {
+            const distance = (pitch - string.pitch + 12) % 12;
+            if (distance > 7) return;
+            const finger = FINGERS[string.name][distance];
+            rows.push(finger === 'OPEN'
+              ? `${string.name} string · OPEN STRING · ${note}`
+              : `${string.name} string · finger ${finger} · ${direction} · ${note}`);
+          });
+        });
+
+        return rows;
+      }
+
+      function renderStaff() {
+        markerLayer.replaceChildren();
+        const ordered = [...selected.keys()];
+
+        ordered.forEach((id, index) => {
+          const position = POSITIONS.find(item => item.id === id);
+          const type = selected.get(id);
+          const marker = document.createElement('span');
+          marker.className = `marker ${type}`;
+          marker.style.left = `${145 + index * 28}px`;
+          marker.style.top = `${position.y}px`;
+          marker.textContent = RULES[type].symbol;
+          markerLayer.append(marker);
+        });
+
+        POSITIONS.forEach(position => {
+          const button = hitLayer.querySelector(`[data-id="${position.id}"]`);
+          const type = selected.get(position.id);
+          button.setAttribute(
+            'aria-label',
+            `${position.id}, ${position.place}. ${type ? RULES[type].symbol : 'no accidental'}. Tap to change.`
+          );
+        });
+      }
+
+      function renderAnswer() {
+        const result = detectKey();
+        changes.replaceChildren();
+
+        if (!result.valid) {
+          keyName.textContent = 'NOT A MAJOR KEY SIGNATURE';
+          keyName.classList.add('invalid');
+          message.textContent = 'Change one of the positions.';
+          return;
+        }
+
+        keyName.textContent = `${result.name} MAJOR`;
+        keyName.classList.remove('invalid');
+        const rows = fingerChanges(result.type, result.count);
+        message.textContent = rows.length ? '' : 'No finger changes.';
+        rows.forEach(text => {
+          const item = document.createElement('li');
+          item.textContent = text;
+          changes.append(item);
+        });
+      }
+
+      function render() {
+        renderStaff();
+        renderAnswer();
+      }
+
+      POSITIONS.forEach(position => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'hit';
+        button.dataset.id = position.id;
+        button.style.top = `${position.y}px`;
+        button.addEventListener('click', () => cycle(position.id));
+        hitLayer.append(button);
+      });
+
+      undoBtn.addEventListener('click', () => {
+        if (!history.length) return;
+        selected = history.pop();
+        render();
+      });
+
+      clearBtn.addEventListener('click', () => {
+        if (!selected.size) return;
+        remember();
+        selected.clear();
+        render();
+      });
+
+      window.__violinKeyFinder = { detectKey, fingerChanges, positions: POSITIONS, rules: RULES };
+      render();
+    })();
+  </script>
+</body>
+</html>
